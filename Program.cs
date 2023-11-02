@@ -41,28 +41,39 @@ namespace Kartoteka
         {
             StringBuilder sb = new StringBuilder();
             Console.WriteLine("Zadej nového uživatele do kartotéky:");
-            Console.Write("Jméno:");
-            string text;
-            while (!String.IsNullOrEmpty(text = Console.ReadLine())) sb.Append(text);//s tím něco provést
-            File.WriteAllText(cesta + "Kartotéka.txt", sb.ToString());
+            Console.Write("Jméno: ");
+            sb.Append(Console.ReadLine() + ",");
+            Console.Write("Příjmení: ");
+            sb.Append(Console.ReadLine() + ",");
+            Console.Write("Rok narození: ");
+            int rokNarozeni;
+            while (!int.TryParse(Console.ReadLine(), out rokNarozeni)||rokNarozeni> DateTime.Now.Year|| rokNarozeni < DateTime.Now.Year-110) Console.WriteLine("Zadej platný rok narození uživatele.");
+            sb.Append(rokNarozeni + ",\n");
+            Console.WriteLine();
+            //string text;
+
+            File.AppendAllText(cesta + "Kartotéka.txt", sb.ToString());
             VyberMenu();
         }
         static void VypsaniSouboru()
         {
+            string[] dataOUzivatelich;
             if (File.Exists(cesta + "Kartotéka.txt"))
             {
-                string[] DataOUzivatelich = File.ReadAllText(cesta + "Kartotéka.txt").Split(',');
+                dataOUzivatelich = File.ReadAllText(cesta + "Kartotéka.txt").Split(',');
+                Console.WriteLine("Uložené údaje o uživatelích:\n");
+                Console.WriteLine("jméno".PadRight(15) + "příjmení".PadRight(15) + "rok narození".PadRight(15));
+                for (int i = 0; i < dataOUzivatelich.Length; i++) 
+                {
+                    Console.Write(dataOUzivatelich[i].PadRight(15));
+                }
+                Console.WriteLine();
             }
             else
             {
                 Console.WriteLine("Nejsou uložena žádná data.\n");
                 ZapisdoSouboru();
             }
-            Console.WriteLine("Uložené údaje o uživatelích:\n");
-            Console.WriteLine("jméno".PadRight(15)+ "příjmení".PadRight(20)+"rok narození".PadLeft(15));
-
-
-
             VyberMenu();
         }
     }
